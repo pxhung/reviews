@@ -43,7 +43,6 @@ with open('tfidf_vectorizer.pkl', 'rb') as f:
 # Tên mô hình
 model_names = ['SVM', 
                'DecisionTree', 
-               'RandomForest', 
                'LogisticRegression', 
                'NaiveBayes']
 
