@@ -145,7 +145,7 @@ def main():
     
     st.title('Review Prediction')
     
-    corpus = st.text_area()
+    corpus = st.text_area("Enter Review")
     text_model = st.radio(
         'Choose the model for text preprocessing',
         ['Bag of Words','TF-IDF'])
