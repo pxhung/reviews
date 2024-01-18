@@ -10,6 +10,9 @@ import streamlit as st
 
 from keras.models import load_model
 
+import spacy
+spacy_nlp = spacy.load('en_core_web_lg')
+
 ######################################### LOAD DỮ LIỆU VÀ MÔ HÌNH ###########################################
 
 ################################ Load danh sách stop word ###################################################
@@ -18,10 +21,6 @@ stop_words = list(pd.read_csv('stop_words.csv'))
 ################################ Load các mô hình tiền xử lý ################################################
 def analyzer(x):
     return x
-
-# Mô hình tiền xử lý ngôn ngữ của Spacy (dùng cho kỹ thuật Lemmatization)
-with open('spacy_nlp.pkl', 'rb') as f:
-    spacy_nlp = pickle.load(f)
 
 # Mô hình tạo các từ ghép 2 chữ (Bigrams)
 with open('bigrams_phraser.pkl', 'rb') as f:
@@ -130,7 +129,7 @@ def main():
         ['Bag of Words','TF-IDF'])
     class_model = st.selectbox(
         'Choose the model for classification',
-        ('SVM','DecisionTree','RandomForest','LogisticRegression','NaiveBayes''Deep Neural Network'),
+        ('SVM','DecisionTree','LogisticRegression','NaiveBayes''Deep Neural Network'),
         index=None,
         placeholder='Select classification model...')
 
