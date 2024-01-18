@@ -11,7 +11,25 @@ import streamlit as st
 from keras.models import load_model
 
 import spacy
-#spacy_nlp = spacy.load('en_core_web_lg')
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from gensim import models
+from gensim.models import Phrases
+from gensim.models.phrases import Phraser
+
+from sklearn.preprocessing import LabelEncoder
+from keras.utils import to_categorical
+
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+
+from keras.models import Sequential
+from keras.layers import Dense
+import tensorflow as tf
 
 ######################################### LOAD DỮ LIỆU VÀ MÔ HÌNH ###########################################
 
