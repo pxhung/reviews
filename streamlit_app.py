@@ -8,8 +8,6 @@ import csv
 import pickle
 import streamlit as st
 
-from keras.models import load_model
-
 import spacy
 
 from sklearn.feature_extraction.text import CountVectorizer
@@ -19,17 +17,11 @@ from gensim import models
 from gensim.models import Phrases
 from gensim.models.phrases import Phraser
 
-from sklearn.preprocessing import LabelEncoder
-from keras.utils import to_categorical
 
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
-
-from keras.models import Sequential
-from keras.layers import Dense
-import tensorflow as tf
 
 ######################################### LOAD DỮ LIỆU VÀ MÔ HÌNH ###########################################
 
@@ -79,15 +71,6 @@ for name in model_names:
     with open('tfidf_'+name+'.pkl', 'rb') as file:
         tfidf_models[name] = pickle.load(file)
 
-################################ Load các mô hình cho học sâu ###############################################
-# Load mô hình Encode mã hóa tập nhãn
-with open('label_encoder.pkl', 'rb') as file:
-    label_encoder = pickle.load(file)
-
-# Load 2 mô hình Deep Neural Network
-dnn_bow = load_model('dnn_bow.keras')
-dnn_tfidf = load_model('dnn_tfidf.keras')
-
 
 ################ TẠO CÁC HÀM #####################
 # Hàm tiền xử lý văn bản
@@ -120,26 +103,12 @@ def vectorize(trigrams,text_model):
 # Hàm dự đoán
 def label_prediction(vector,text_model,class_model):
     
-    if class_model == 'Deep Neural Network':
-        if text_model == 'Bag of Words':
-            vector.sort_indices()
-            prediction = dnn_bow.predict(vector)
-            y_int_inverse = np.argmax(prediction, axis=1)
-            label = label_encoder.inverse_transform(y_int_inverse)
-            return label[0]
-        if text_model == 'TF-IDF':
-            vector.sort_indices()
-            prediction = dnn_tfidf.predict(vector)
-            y_int_inverse = np.argmax(prediction, axis=1)
-            label = label_encoder.inverse_transform(y_int_inverse)
-            return label[0]
-    else:
-        if text_model == 'Bag of Words':
-            label = bow_models[class_model].predict(vector)
-            return label[0]
-        if text_model == 'TF-IDF':
-            label = tfidf_models[class_model].predict(vector)
-            return label[0] 
+    if text_model == 'Bag of Words':
+        label = bow_models[class_model].predict(vector)
+        return label[0]
+    if text_model == 'TF-IDF':
+        label = tfidf_models[class_model].predict(vector)
+        return label[0] 
     
 def main():
     
@@ -151,7 +120,7 @@ def main():
         ['Bag of Words','TF-IDF'])
     class_model = st.selectbox(
         'Choose the model for classification',
-        ('SVM','DecisionTree','LogisticRegression','NaiveBayes''Deep Neural Network'),
+        ('SVM','DecisionTree','LogisticRegression','NaiveBayes'),
         index=None,
         placeholder='Select classification model...')
 
